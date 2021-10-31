@@ -1,0 +1,2 @@
+recursive-include nxpl *.py
+recursive-exclude * __pycache__

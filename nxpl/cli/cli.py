@@ -12,7 +12,6 @@ class RunGroup(Group):
         return None
 
 
-
 @click.command(cls=RunGroup, invoke_without_command=True)
 @click.version_option(version=__version__)
 @click.pass_context

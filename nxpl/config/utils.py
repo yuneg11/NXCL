@@ -14,11 +14,12 @@ from yaml.representer import Representer, SafeRepresenter
 from yaml.resolver import Resolver
 
 from nxpl.core.typing import PathLike
-from nxpl.config.base import Config
+from nxpl.config.base import Config, ModuleConfig, BuilderConfig
 
 __all__ = [
     "read_config",
     "write_config",
+    "merge_configs",
 ]
 
 
@@ -33,8 +34,23 @@ class NXPLConstructor(DefaultConstructor):
         value = self.construct_mapping(node)
         data.update(value)
 
+    def construct_nxpl_module_map(self, node):
+        data = ModuleConfig()
+        yield data
+        value = self.construct_mapping(node)
+        data.update(value)
+
+    def construct_nxpl_builder_map(self, node):
+        data = BuilderConfig()
+        yield data
+        value = self.construct_mapping(node)
+        data.update(value)
+
 
 NXPLConstructor.add_constructor("tag:yaml.org,2002:map", NXPLConstructor.construct_yaml_map)
+NXPLConstructor.add_constructor(Config.yaml_tag, NXPLConstructor.construct_yaml_map)
+NXPLConstructor.add_constructor(ModuleConfig.yaml_tag, NXPLConstructor.construct_nxpl_module_map)
+NXPLConstructor.add_constructor(BuilderConfig.yaml_tag, NXPLConstructor.construct_nxpl_builder_map)
 
 
 class NXPLLoader(Reader, Scanner, Parser, Composer, NXPLConstructor, Resolver):
@@ -68,10 +84,13 @@ def read_config(file_path: PathLike) -> Any:
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Configuration file not found: {file_path}")
 
-    with open(file_path, "r") as file:
-        config = yaml.load(file, Loader=NXPLLoader)
-
-    return config
+    try:
+        with open(file_path, "r") as file:
+            config = yaml.load(file, Loader=NXPLLoader)
+        return config
+    except yaml.YAMLError as e:
+        print(f"Error in configuration file: '{file_path}'")
+        print(e)
 
 
 def write_config(config: Config, file_path: PathLike, makedirs: bool = True, **yaml_kwargs) -> None:
@@ -91,5 +110,22 @@ def write_config(config: Config, file_path: PathLike, makedirs: bool = True, **y
         else:
             raise FileNotFoundError(f"Directory not found: {file_dir}")
 
-    with open(file_path, "w") as file:
-        yaml.dump(config, file, Dumper=NXPLDumper, **yaml_kwargs)
+    try:
+        with open(file_path, "w") as file:
+            yaml.dump(config, file, Dumper=NXPLDumper, **yaml_kwargs)
+    except yaml.YAMLError as e:
+        print(f"Error in configuration file: '{file_path}'")
+        print(e)
+
+
+def merge_configs(*configs) -> Config:
+    """
+    Merges multiple Configs into a single Config.
+
+    :param configs: Config objects to merge.
+    :return: Merged Config.
+    """
+    config = configs[0].__class__()
+    for c in configs:
+        config.update(c)
+    return config

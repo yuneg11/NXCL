@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from nxpl.config import (
-    read_config,
-    Config,
-)
+from nxpl.config import read_config, Config
 from nxpl.core.typing import PathLike
 
 __all__ = [

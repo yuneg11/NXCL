@@ -1,7 +1,7 @@
 import click
 from click import Group
 
-from nxpl.__version__ import __version__
+from nxpl.__init__ import __version__
 
 
 class RunGroup(Group):

@@ -1,1 +1,7 @@
+mypy
 black
+Sphinx
+sphinx-copybutton
+sphinx-autobuild
+furo
+ghp-import

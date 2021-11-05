@@ -7,7 +7,6 @@ __all__ = [
     "AttrDict",
     "Config",
     "ModuleConfig",
-    "BuilderConfig",
 ]
 
 
@@ -26,7 +25,7 @@ class AttrDict(dict):
 
 
 class Config(AttrDict):
-    yaml_tag = "!nxpl-config"  # Automatically loaded by YAML. Do not needed.
+    yaml_tag = "!nxpl-config"  # Automatically considered by YAML loader. Do not needed actually.
 
     @classmethod
     def from_yaml(cls, loader, node) -> Config:
@@ -41,7 +40,7 @@ class Config(AttrDict):
     def to_yaml(cls, dumper, data):
         return dumper.represent_mapping(cls.yaml_tag, data)
 
-    def update(self, other: Union[dict, AttrDict]) -> None:
+    def update(self, other: Union[dict, AttrDict]) -> Config:
         for key, value in other.items():
             if key in self:
                 old_value = self[key]
@@ -52,9 +51,10 @@ class Config(AttrDict):
                         value = Config(**value)
                     self[key] = value
             else:
-                if isinstance(value, dict):
+                if not isinstance(value, Config) and isinstance(value, dict):
                     value = Config(**value)
                 self[key] = value
+        return self
 
     def __repr__(self) -> str:
         # TODO: Improve representation
@@ -65,16 +65,11 @@ class Config(AttrDict):
 class ModuleConfig(Config):
     yaml_tag = "!nxpl-module"
 
-    def __init__(self, nxpl_id: str = "nxpl:none", **kwargs):
+    def __init__(self, nxpl_id: str = "@nxpl/none", **kwargs):
         if nxpl_id is None:
             raise ValueError("ModuleConfig requires 'nxpl_id'")
         super().__init__(nxpl_id=nxpl_id, **kwargs)
 
-
-class BuilderConfig(Config):
-    yaml_tag = "!nxpl-builder"
-
-    def __init__(self, nxpl_id: str = "nxpl:none", **kwargs):
-        if nxpl_id is None:
-            raise ValueError("BuilderConfig requires 'nxpl_id'")
-        super().__init__(nxpl_id=nxpl_id, **kwargs)
+    def build(self, *args, **kwargs) -> Any:
+        # TODO: Implement
+        pass

@@ -1,8 +1,12 @@
 from setuptools import setup
 
-with open("nxpl/__version__.py") as version_file:
+with open("nxpl/__init__.py") as init_file:
     __version__ = ""
-    exec(version_file.read())  # extract __version__
+    # extract __version__
+    for line in init_file:
+        if line.startswith("__version__"):
+            exec(line)
+            break
 
 
 with open("README.md") as readme_file:
@@ -23,6 +27,7 @@ setup(
     },
     packages=["nxpl"],
     package_dir={"nxpl": "nxpl"},
+    package_data={'': ["default.yaml"]},
     include_package_data=True,
     entry_points={
         "console_scripts": [

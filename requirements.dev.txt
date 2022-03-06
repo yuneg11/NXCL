@@ -3,5 +3,6 @@ black
 Sphinx
 sphinx-copybutton
 sphinx-autobuild
+myst_parser
 furo
 ghp-import

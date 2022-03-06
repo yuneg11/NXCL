@@ -1,4 +1,4 @@
-nxpl
+nxpl package
 ============
 
 Subpackages
@@ -7,9 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   nxpl.cli
    nxpl.config
-   nxpl.core
+   nxpl.utils
 
 Module contents
 ---------------

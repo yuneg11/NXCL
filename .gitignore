@@ -3,3 +3,4 @@
 /dist
 /nxpl.egg-info
 /docs/_build
+/_*

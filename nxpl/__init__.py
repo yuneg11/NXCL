@@ -1,5 +1,11 @@
-import nxpl
-from nxpl import config
-from nxpl import logging
+from typing import TYPE_CHECKING
 
-__version__ = "0.0.1"
+from nxpl import core
+
+if TYPE_CHECKING:
+    from nxpl import config
+else:
+    config = core.misc.ModuleWrapper("nxpl.config")
+
+
+__version__ = "0.0.2"

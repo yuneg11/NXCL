@@ -14,7 +14,7 @@ from nxpl import __version__
 # -- Project information -----------------------------------------------------
 
 project = "NXPL"
-copyright = "2021, EungGu Yun"
+copyright = "2022, EungGu Yun"
 author = "EungGu Yun"
 
 # The full version, including alpha/beta/rc tags

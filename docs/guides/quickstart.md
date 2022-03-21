@@ -1,5 +1,5 @@
 # Getting Started
 
 ```bash
-$ git clone https://github.com/yuneg11/nxpl.git
+git clone https://github.com/yuneg11/nxcl.git
 ```

@@ -1,7 +1,7 @@
-nxpl.config.argparse module
+nxcl.config.argparse module
 ===========================
 
-.. automodule:: nxpl.config.argparse
+.. automodule:: nxcl.config.argparse
    :members:
    :undoc-members:
    :show-inheritance:

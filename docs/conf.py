@@ -8,12 +8,12 @@ if os.path.basename(os.getcwd()) == "docs":
 else:
     sys.path.insert(0, os.getcwd())
 
-from nxpl import __version__
+from nxcl import __version__
 
 
 # -- Project information -----------------------------------------------------
 
-project = "NXPL"
+project = "NXCL"
 copyright = "2022, EungGu Yun"
 author = "EungGu Yun"
 
@@ -55,7 +55,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 html_theme = "furo"
-html_title = "NXPL"
+html_title = "NXCL"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

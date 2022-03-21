@@ -1,6 +1,6 @@
 from setuptools import setup
 
-with open("nxpl/__init__.py") as init_file:
+with open("nxcl/__init__.py") as init_file:
     __version__ = ""
     # extract __version__
     for line in init_file:
@@ -14,26 +14,21 @@ with open("README.md") as readme_file:
 
 
 setup(
-    name="nxpl",
+    name="nxcl",
     version=__version__,
     author="EungGu Yun",
     author_email="yuneg11@gmail.com",
-    description="NXPL is eXperiment PipeLine",
+    description="NXCL is eXperiment Core Library",
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="https://github.com/yuneg11/nxpl",
+    url="https://github.com/yuneg11/nxcl",
     project_urls={
-        "Bug Tracker": "https://github.com/yuneg11/nxpl/issues"
+        "Bug Tracker": "https://github.com/yuneg11/nxcl/issues"
     },
-    packages=["nxpl"],
-    package_dir={"nxpl": "nxpl"},
-    package_data={'': ["default.yaml"]},
-    include_package_data=True,
-    entry_points={
-        "console_scripts": [
-            "nxpl=nxpl.cli.cli:cli",
-        ]
-    },
+    packages=["nxcl"],
+    package_dir={"nxcl": "nxcl"},
+    # package_data={'': []},
+    # include_package_data=True,
     license="MIT license",
     python_requires=">=3.7",
     classifiers=[

@@ -1,10 +1,12 @@
-# NXPL
+# NXCL
 
-[NXPL](https://github.com/yuneg11/nxpl) is eXperiment PipeLine
+[NXCL](https://github.com/yuneg11/nxcl) is eXperiment Core Library
+
+**This library is under construction.**
 
 ## Build docs
 
 ```bash
-sphinx-apidoc -f -o docs nxpl --separate
+sphinx-apidoc -f -o docs nxcl --separate
 make dev
 ```

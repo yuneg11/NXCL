@@ -1,6 +1,6 @@
 /.mypy_cache
 /build
 /dist
-/nxpl.egg-info
+/nxcl.egg-info
 /docs/_build
 /_*

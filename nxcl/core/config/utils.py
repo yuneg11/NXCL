@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 
 from .base import ConfigDict
-from .yaml import NXPLSafeLoader, NXPLDumper
+from .yaml import NXCLSafeLoader, NXCLDumper
 
 
 __all__ = [
@@ -13,7 +13,11 @@ __all__ = [
 ]
 
 
-def load_config(file: PathLike, Loader=NXPLSafeLoader):
+# TODOs
+# - Support stream as file input.
+
+
+def load_config(file: PathLike, Loader=NXCLSafeLoader):
     """
     Load config from file.
     """
@@ -23,7 +27,7 @@ def load_config(file: PathLike, Loader=NXPLSafeLoader):
         return yaml.load(f, Loader=Loader)
 
 
-def save_config(config: ConfigDict, file: PathLike, Dumper=NXPLDumper, **yaml_kwargs):
+def save_config(config: ConfigDict, file: PathLike, Dumper=NXCLDumper, **yaml_kwargs):
     """
     Save config to file.
     """

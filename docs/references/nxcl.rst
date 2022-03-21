@@ -1,4 +1,4 @@
-nxpl package
+nxcl package
 ============
 
 Subpackages
@@ -7,13 +7,13 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   nxpl.config
-   nxpl.utils
+   nxcl.config
+   nxcl.utils
 
 Module contents
 ---------------
 
-.. automodule:: nxpl
+.. automodule:: nxcl
    :members:
    :undoc-members:
    :show-inheritance:

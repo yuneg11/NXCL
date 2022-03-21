@@ -1,4 +1,4 @@
-nxpl.config package
+nxcl.config package
 ===================
 
 Submodules
@@ -7,12 +7,12 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   nxpl.config.argparse
+   nxcl.config.argparse
 
 Module contents
 ---------------
 
-.. automodule:: nxpl.config
+.. automodule:: nxcl.config
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,6 +1,6 @@
 from argparse import Action
 
-from nxpl.core.config import ConfigDict
+from nxcl.core.config import ConfigDict
 
 
 __all__ = [

@@ -13,16 +13,16 @@ from .base import ConfigDict
 
 
 __all__ = [
-    "NXPLSafeConstructor",
-    "NXPLFullConstructor",
-    "NXPLConstructor",
-    "NXPLSafeLoader",
-    "NXPLFullLoader",
-    "NXPLLoader",
-    "NXPLSafeRepresenter",
-    "NXPLRepresenter",
-    "NXPLSafeDumper",
-    "NXPLDumper",
+    "NXCLSafeConstructor",
+    "NXCLFullConstructor",
+    "NXCLConstructor",
+    "NXCLSafeLoader",
+    "NXCLFullLoader",
+    "NXCLLoader",
+    "NXCLSafeRepresenter",
+    "NXCLRepresenter",
+    "NXCLSafeDumper",
+    "NXCLDumper",
     "add_constructor",
     "add_multi_constructor",
     "add_representer",
@@ -33,7 +33,7 @@ __all__ = [
 YAML_TAG_MAP = "tag:yaml.org,2002:map"
 
 
-class NXPLConstructorMixin(BaseConstructor):
+class NXCLConstructorMixin(BaseConstructor):
     def construct_yaml_map(self, node):
         data = ConfigDict()
         yield data
@@ -48,49 +48,49 @@ class NXPLConstructorMixin(BaseConstructor):
     #     data.update(value)
 
 
-class NXPLSafeConstructor(SafeConstructor, NXPLConstructorMixin):
+class NXCLSafeConstructor(SafeConstructor, NXCLConstructorMixin):
     pass
 
 
-class NXPLFullConstructor(FullConstructor, NXPLConstructorMixin):
+class NXCLFullConstructor(FullConstructor, NXCLConstructorMixin):
     pass
 
 
-class NXPLConstructor(Constructor, NXPLConstructorMixin):
+class NXCLConstructor(Constructor, NXCLConstructorMixin):
     pass
 
 
-class NXPLSafeLoader(Reader, Scanner, Parser, Composer, NXPLSafeConstructor, Resolver):
+class NXCLSafeLoader(Reader, Scanner, Parser, Composer, NXCLSafeConstructor, Resolver):
     def __init__(self, stream):
         Reader.__init__(self, stream)
         Scanner.__init__(self)
         Parser.__init__(self)
         Composer.__init__(self)
-        NXPLSafeConstructor.__init__(self)
+        NXCLSafeConstructor.__init__(self)
         Resolver.__init__(self)
 
 
-class NXPLFullLoader(Reader, Scanner, Parser, Composer, NXPLFullConstructor, Resolver):
+class NXCLFullLoader(Reader, Scanner, Parser, Composer, NXCLFullConstructor, Resolver):
     def __init__(self, stream):
         Reader.__init__(self, stream)
         Scanner.__init__(self)
         Parser.__init__(self)
         Composer.__init__(self)
-        NXPLFullConstructor.__init__(self)
+        NXCLFullConstructor.__init__(self)
         Resolver.__init__(self)
 
 
-class NXPLLoader(Reader, Scanner, Parser, Composer, NXPLConstructor, Resolver):
+class NXCLLoader(Reader, Scanner, Parser, Composer, NXCLConstructor, Resolver):
     def __init__(self, stream):
         Reader.__init__(self, stream)
         Scanner.__init__(self)
         Parser.__init__(self)
         Composer.__init__(self)
-        NXPLConstructor.__init__(self)
+        NXCLConstructor.__init__(self)
         Resolver.__init__(self)
 
 
-class NXPLRepresenterMixin(BaseRepresenter):
+class NXCLRepresenterMixin(BaseRepresenter):
     def represent_config(self, data):
         return self.represent_mapping(YAML_TAG_MAP, data.to_dict())
 
@@ -100,15 +100,15 @@ class NXPLRepresenterMixin(BaseRepresenter):
         return self.represent_scalar("!block:" + data.block_id, data.to_dict())
 
 
-class NXPLSafeRepresenter(SafeRepresenter, NXPLRepresenterMixin):
+class NXCLSafeRepresenter(SafeRepresenter, NXCLRepresenterMixin):
     pass
 
 
-class NXPLRepresenter(Representer, NXPLRepresenterMixin):
+class NXCLRepresenter(Representer, NXCLRepresenterMixin):
     pass
 
 
-class NXPLSafeDumper(Emitter, Serializer, NXPLSafeRepresenter, Resolver):
+class NXCLSafeDumper(Emitter, Serializer, NXCLSafeRepresenter, Resolver):
     def __init__(
         self, stream, default_style=None, default_flow_style=False, canonical=None,
         indent=None, width=None, allow_unicode=None, line_break=None, encoding=None,
@@ -122,14 +122,14 @@ class NXPLSafeDumper(Emitter, Serializer, NXPLSafeRepresenter, Resolver):
             self, encoding=encoding, explicit_start=explicit_start,
             explicit_end=explicit_end, version=version, tags=tags,
         )
-        NXPLSafeRepresenter.__init__(
+        NXCLSafeRepresenter.__init__(
             self, default_style=default_style, default_flow_style=default_flow_style,
             sort_keys=sort_keys,
         )
         Resolver.__init__(self)
 
 
-class NXPLDumper(Emitter, Serializer, NXPLRepresenter, Resolver):
+class NXCLDumper(Emitter, Serializer, NXCLRepresenter, Resolver):
     def __init__(
         self, stream, default_style=None, default_flow_style=False, canonical=None,
         indent=None, width=None, allow_unicode=None, line_break=None, encoding=None,
@@ -143,7 +143,7 @@ class NXPLDumper(Emitter, Serializer, NXPLRepresenter, Resolver):
             self, encoding=encoding, explicit_start=explicit_start,
             explicit_end=explicit_end, version=version, tags=tags,
         )
-        NXPLRepresenter.__init__(
+        NXCLRepresenter.__init__(
             self, default_style=default_style, default_flow_style=default_flow_style,
             sort_keys=sort_keys,
         )
@@ -157,9 +157,9 @@ def add_constructor(tag, constructor, Loader=None):
     and a node object and produces the corresponding Python object.
     """
     if Loader is None:
-        NXPLSafeLoader.add_constructor(tag, constructor)
-        NXPLFullLoader.add_constructor(tag, constructor)
-        NXPLLoader.add_constructor(tag, constructor)
+        NXCLSafeLoader.add_constructor(tag, constructor)
+        NXCLFullLoader.add_constructor(tag, constructor)
+        NXCLLoader.add_constructor(tag, constructor)
     else:
         Loader.add_constructor(tag, constructor)
 
@@ -172,9 +172,9 @@ def add_multi_constructor(tag_prefix, multi_constructor, Loader=None):
     and a node object and produces the corresponding Python object.
     """
     if Loader is None:
-        NXPLSafeLoader.add_multi_constructor(tag_prefix, multi_constructor)
-        NXPLFullLoader.add_multi_constructor(tag_prefix, multi_constructor)
-        NXPLLoader.add_multi_constructor(tag_prefix, multi_constructor)
+        NXCLSafeLoader.add_multi_constructor(tag_prefix, multi_constructor)
+        NXCLFullLoader.add_multi_constructor(tag_prefix, multi_constructor)
+        NXCLLoader.add_multi_constructor(tag_prefix, multi_constructor)
     else:
         Loader.add_multi_constructor(tag_prefix, multi_constructor)
 
@@ -187,8 +187,8 @@ def add_representer(data_type, representer, Dumper=None):
     and producing the corresponding representation node.
     """
     if Dumper is None:
-        NXPLSafeDumper.add_representer(data_type, representer)
-        NXPLDumper.add_representer(data_type, representer)
+        NXCLSafeDumper.add_representer(data_type, representer)
+        NXCLDumper.add_representer(data_type, representer)
     else:
         Dumper.add_representer(data_type, representer)
 
@@ -201,14 +201,14 @@ def add_multi_representer(data_type, multi_representer, Dumper=None):
     and producing the corresponding representation node.
     """
     if Dumper is None:
-        NXPLSafeDumper.add_multi_representer(data_type, multi_representer)
-        NXPLDumper.add_multi_representer(data_type, multi_representer)
+        NXCLSafeDumper.add_multi_representer(data_type, multi_representer)
+        NXCLDumper.add_multi_representer(data_type, multi_representer)
     else:
         Dumper.add_multi_representer(data_type, multi_representer)
 
 
-add_constructor(YAML_TAG_MAP, NXPLConstructorMixin.construct_yaml_map)
-add_constructor(ConfigDict.yaml_tag, NXPLConstructorMixin.construct_yaml_map)
-# add_multi_constructor(ConfigDict.yaml_tag + u":", NXPLConstructorMixin.construct_yaml_multi_map)
+add_constructor(YAML_TAG_MAP, NXCLConstructorMixin.construct_yaml_map)
+add_constructor(ConfigDict.yaml_tag, NXCLConstructorMixin.construct_yaml_map)
+# add_multi_constructor(ConfigDict.yaml_tag + u":", NXCLConstructorMixin.construct_yaml_multi_map)
 
-add_representer(ConfigDict, NXPLRepresenterMixin.represent_config)
+add_representer(ConfigDict, NXCLRepresenterMixin.represent_config)

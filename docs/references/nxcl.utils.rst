@@ -1,10 +1,10 @@
-nxpl.utils package
+nxcl.utils package
 ==================
 
 Module contents
 ---------------
 
-.. automodule:: nxpl.utils
+.. automodule:: nxcl.utils
    :members:
    :undoc-members:
    :show-inheritance:

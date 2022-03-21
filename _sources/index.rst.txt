@@ -1,7 +1,7 @@
-NXPL documentation
+NXCL documentation
 ==================
 
-NXPL is eXeriment PipeLine.
+NXCL is eXeriment Core Library.
 
 Please refer to the `Furo documentation <https://pradyunsg.me/furo/#>`_ for more information.
 
@@ -15,10 +15,10 @@ Please refer to the `Furo documentation <https://pradyunsg.me/furo/#>`_ for more
    :caption: Reference
    :hidden:
 
-   references/nxpl
+   references/nxcl
 
 .. toctree::
    :caption: Development
    :hidden:
 
-   GitHub Repository <https://github.com/yuneg11/NXPL>
+   GitHub Repository <https://github.com/yuneg11/NXCL>

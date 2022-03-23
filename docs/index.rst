@@ -1,7 +1,7 @@
 NXCL documentation
 ==================
 
-NXCL is eXeriment Core Library.
+NXCL is an eXeriment Core Library.
 
 Please refer to the `Furo documentation <https://pradyunsg.me/furo/#>`_ for more information.
 

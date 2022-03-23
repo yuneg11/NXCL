@@ -1,1 +1,1 @@
-from nxcl.core.misc.module import ModuleWrapper
+from nxcl.core.misc.module import LazyModule

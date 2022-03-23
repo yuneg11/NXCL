@@ -18,10 +18,10 @@ setup(
     version=__version__,
     author="EungGu Yun",
     author_email="yuneg11@gmail.com",
-    description="NXCL is eXperiment Core Library",
+    description="NXCL is an eXperiment Core Library",
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="https://github.com/yuneg11/nxcl",
+    url="https://github.com/yuneg11/NXCL",
     project_urls={
         "Bug Tracker": "https://github.com/yuneg11/nxcl/issues"
     },
@@ -38,9 +38,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: System :: Logging",
-        "Topic :: System :: Monitoring",
     ],
 )

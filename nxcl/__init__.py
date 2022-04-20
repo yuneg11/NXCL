@@ -9,12 +9,13 @@ if TYPE_CHECKING:
     from nxcl import logging
     from nxcl import rich
     from nxcl import utils
+    from nxcl import experimental
 else:
-    cli     = LazyModule("nxcl.cli")
-    config  = LazyModule("nxcl.config")
+    cli = LazyModule("nxcl.cli")
+    config = LazyModule("nxcl.config")
     logging = LazyModule("nxcl.logging")
-    rich    = LazyModule("nxcl.rich")
-    utils   = LazyModule("nxcl.utils")
-
+    rich = LazyModule("nxcl.rich")
+    utils = LazyModule("nxcl.utils")
+    experimental = LazyModule("nxcl.experimental")
 
 __version__ = "0.0.2"

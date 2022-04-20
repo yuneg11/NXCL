@@ -84,7 +84,7 @@ class RichFileHandler(RichHandler):
         highlighter: Optional[Highlighter] = None,
         markup: bool = True,
         rich_tracebacks: bool = True,
-        tracebacks_width: Optional[int] = None,
+        tracebacks_width: Optional[int] = 120,
         tracebacks_extra_lines: int = 3,
         tracebacks_theme: Optional[str] = None,
         tracebacks_word_wrap: bool = True,
@@ -104,6 +104,7 @@ class RichFileHandler(RichHandler):
         self.stream = open(self.baseFilename, self.mode, encoding=self.encoding, errors=self.errors)
         self.console = Console(
             file=self.stream,
+            width=10000,
             markup=markup,
             log_time=show_time,
             log_path=show_path,

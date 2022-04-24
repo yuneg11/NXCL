@@ -1,8 +1,11 @@
+from pathlib import Path
+
+import yaml
 from yaml.reader import Reader
 from yaml.scanner import Scanner
 from yaml.parser import Parser
 from yaml.composer import Composer
-from yaml.constructor import BaseConstructor, SafeConstructor, FullConstructor, Constructor
+from yaml.constructor import BaseConstructor, SafeConstructor, FullConstructor, Constructor, ConstructorError
 from yaml.resolver import Resolver
 from yaml.emitter import Emitter
 from yaml.serializer import Serializer
@@ -30,7 +33,12 @@ __all__ = [
 ]
 
 
+_TEMP_PATHS = {
+    "@": "./configs/",
+}
+
 YAML_TAG_MAP = "tag:yaml.org,2002:map"
+YAML_TAG_INCLUDE = u"!include"
 
 
 class NXCLConstructorMixin(BaseConstructor):
@@ -39,6 +47,26 @@ class NXCLConstructorMixin(BaseConstructor):
         yield data
         value = self.construct_mapping(node)
         data.update(value)
+
+    # TODO: As a prototype, the implementation just loads the include file using the default loader.
+    #       But this approach does not support yaml operations (i.e. anchors, references, etc.) in
+    #       the include file. In the future, we need to implement a custom constructor to support
+    #       load the include yaml file as a node. Further, we need to support custom path aliases
+    #       when NXCL supports global config storage.
+    def construct_yaml_include(self, node):
+        if not isinstance(node, yaml.ScalarNode):
+            raise ConstructorError("value of include must be a string")
+
+        path = str(node.value)
+        for symbol, value in _TEMP_PATHS.items():
+            path = path.replace(symbol, value)
+        path = Path(path).expanduser()
+
+        if not path.exists():
+            raise ConstructorError(f"include file not found: {path}")
+
+        with path.open("r") as f:
+            return yaml.load(f, Loader=self.__class__)
 
     # def construct_yaml_multi_map(self, tag_suffix, node):
     #     print(node.tag, tag_suffix)
@@ -94,10 +122,10 @@ class NXCLRepresenterMixin(BaseRepresenter):
     def represent_config(self, data):
         return self.represent_mapping(YAML_TAG_MAP, data.to_dict())
 
-    def represent_block(self, data):
+    def represent_module(self, data):
         # TODO: Implement this
         raise NotImplementedError
-        return self.represent_scalar("!block:" + data.block_id, data.to_dict())
+        return self.represent_scalar("!module:" + data.module_id, data.to_dict())
 
 
 class NXCLSafeRepresenter(SafeRepresenter, NXCLRepresenterMixin):
@@ -208,6 +236,7 @@ def add_multi_representer(data_type, multi_representer, Dumper=None):
 
 
 add_constructor(YAML_TAG_MAP, NXCLConstructorMixin.construct_yaml_map)
+add_constructor(YAML_TAG_INCLUDE, NXCLConstructorMixin.construct_yaml_include)
 add_constructor(ConfigDict.yaml_tag, NXCLConstructorMixin.construct_yaml_map)
 # add_multi_constructor(ConfigDict.yaml_tag + u":", NXCLConstructorMixin.construct_yaml_multi_map)
 

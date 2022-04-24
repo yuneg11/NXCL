@@ -36,12 +36,12 @@ def setup_logger(logger_name: str, output_dir: str, suppress: Optional[Iterable]
     stream_handler.setFormatter(logging.Formatter(fmt=LOG_SHORT_FORMAT, datefmt=LOG_DATE_SHORT_FORMAT))
     logger.addHandler(stream_handler)
 
-    debug_file_handler = RichFileHandler(os.path.join(output_dir, "debug.log"), mode="w")
+    debug_file_handler = RichFileHandler(os.path.join(output_dir, "debug.log"), mode="a")
     debug_file_handler.setLevel(logging.DEBUG)
     debug_file_handler.setFormatter(logging.Formatter(fmt=LOG_LONG_FORMAT, datefmt=LOG_DATE_LONG_FORMAT))
     logger.addHandler(debug_file_handler)
 
-    info_file_handler = RichFileHandler(os.path.join(output_dir, "info.log"), mode="w", tracebacks_suppress=suppress)
+    info_file_handler = RichFileHandler(os.path.join(output_dir, "info.log"), mode="a", tracebacks_suppress=suppress)
     info_file_handler.setLevel(logging.INFO)
     info_file_handler.setFormatter(logging.Formatter(fmt=LOG_SHORT_FORMAT, datefmt=LOG_DATE_LONG_FORMAT))
     logger.addHandler(info_file_handler)

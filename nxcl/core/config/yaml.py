@@ -5,11 +5,21 @@ from yaml.reader import Reader
 from yaml.scanner import Scanner
 from yaml.parser import Parser
 from yaml.composer import Composer
-from yaml.constructor import BaseConstructor, SafeConstructor, FullConstructor, Constructor, ConstructorError
+from yaml.constructor import (
+    BaseConstructor,
+    SafeConstructor,
+    FullConstructor,
+    Constructor,
+    ConstructorError,
+)
 from yaml.resolver import Resolver
 from yaml.emitter import Emitter
 from yaml.serializer import Serializer
-from yaml.representer import BaseRepresenter, SafeRepresenter, Representer
+from yaml.representer import (
+    BaseRepresenter,
+    SafeRepresenter,
+    Representer,
+)
 from yaml.resolver import Resolver
 
 from .base import ConfigDict
@@ -39,6 +49,10 @@ _TEMP_PATHS = {
 
 YAML_TAG_MAP = "tag:yaml.org,2002:map"
 YAML_TAG_INCLUDE = u"!include"
+YAML_TAG_PYTHON_NAME_ALIAS = u"!name:"
+YAML_TAG_PYTHON_OBJECT_ALIAS = u"!object:"
+YAML_TAG_PYTHON_OBJECT_NEW_ALIAS = u"!object/new:"
+YAML_TAG_PYTHON_OBJECT_APPLY_ALIAS = u"!object/apply:"
 
 
 class NXCLConstructorMixin(BaseConstructor):
@@ -51,8 +65,10 @@ class NXCLConstructorMixin(BaseConstructor):
     # TODO: As a prototype, the implementation just loads the include file using the default loader.
     #       But this approach does not support yaml operations (i.e. anchors, references, etc.) in
     #       the include file. In the future, we need to implement a custom constructor to support
-    #       load the include yaml file as a node. Further, we need to support custom path aliases
-    #       when NXCL supports global config storage.
+    #       load the include yaml file as a node. Check below:
+    #           - https://realpython.com/python-yaml/#parse-a-stream-of-events
+    #           - https://pyyaml.org/wiki/PyYAMLDocumentation
+    #       Further, we need to support custom path aliases when NXCL supports global config storage.
     def construct_yaml_include(self, node):
         if not isinstance(node, yaml.ScalarNode):
             raise ConstructorError("value of include must be a string")
@@ -63,10 +79,11 @@ class NXCLConstructorMixin(BaseConstructor):
         path = Path(path).expanduser()
 
         if not path.exists():
-            raise ConstructorError(f"include file not found: {path}")
+            raise FileNotFoundError(f"include file not found: {path}")
 
         with path.open("r") as f:
             return yaml.load(f, Loader=self.__class__)
+            # return yaml.compose(f, Loader=self.__class__)
 
     # def construct_yaml_multi_map(self, tag_suffix, node):
     #     print(node.tag, tag_suffix)
@@ -235,9 +252,22 @@ def add_multi_representer(data_type, multi_representer, Dumper=None):
         Dumper.add_multi_representer(data_type, multi_representer)
 
 
+# Alias
 add_constructor(YAML_TAG_MAP, NXCLConstructorMixin.construct_yaml_map)
+
+NXCLFullConstructor.add_multi_constructor(YAML_TAG_PYTHON_NAME_ALIAS, FullConstructor.construct_python_name)
+NXCLFullConstructor.add_multi_constructor(YAML_TAG_PYTHON_OBJECT_ALIAS, FullConstructor.construct_python_object)
+NXCLFullConstructor.add_multi_constructor(YAML_TAG_PYTHON_OBJECT_NEW_ALIAS, FullConstructor.construct_python_object_new)
+NXCLFullConstructor.add_multi_constructor(YAML_TAG_PYTHON_OBJECT_APPLY_ALIAS, FullConstructor.construct_python_object_apply)
+
+NXCLConstructor.add_multi_constructor(YAML_TAG_PYTHON_NAME_ALIAS, Constructor.construct_python_name)
+NXCLConstructor.add_multi_constructor(YAML_TAG_PYTHON_OBJECT_ALIAS, Constructor.construct_python_object)
+NXCLConstructor.add_multi_constructor(YAML_TAG_PYTHON_OBJECT_NEW_ALIAS, Constructor.construct_python_object_new)
+NXCLConstructor.add_multi_constructor(YAML_TAG_PYTHON_OBJECT_APPLY_ALIAS, Constructor.construct_python_object_apply)
+
+# NXCL extensions
 add_constructor(YAML_TAG_INCLUDE, NXCLConstructorMixin.construct_yaml_include)
 add_constructor(ConfigDict.yaml_tag, NXCLConstructorMixin.construct_yaml_map)
-# add_multi_constructor(ConfigDict.yaml_tag + u":", NXCLConstructorMixin.construct_yaml_multi_map)
+# add_multi_constructor(ConfigDict.yaml_tag, NXCLConstructorMixin.construct_yaml_multi_map)
 
 add_representer(ConfigDict, NXCLRepresenterMixin.represent_config)

@@ -18,4 +18,4 @@ else:
     utils = LazyModule("nxcl.utils")
     experimental = LazyModule("nxcl.experimental")
 
-__version__ = "0.0.2"
+__version__ = "0.0.3.dev0"

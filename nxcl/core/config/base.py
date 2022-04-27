@@ -49,6 +49,12 @@ class ConfigDict(dict):
 
     yaml_tag = u"!config"
 
+    def __new__(cls, *args, **kwargs):
+        obj = super().__new__(cls)
+        super(ConfigDict, obj).__setattr__("__children", {})
+        super(ConfigDict, obj).__setattr__("__locked", False)
+        return obj
+
     # TODO: support iterable as args
     def __init__(
         self,
@@ -59,8 +65,8 @@ class ConfigDict(dict):
     ):
         super().__init__()
 
-        self.__super_setattr("children", {})
-        self.__super_setattr("locked", False)
+        # self.__super_setattr("children", {})
+        # self.__super_setattr("locked", False)
 
         for arg in args:
             if isinstance(arg, Mapping):
@@ -216,7 +222,11 @@ class ConfigDict(dict):
         return self.__get_child(key)
 
     def __setitem__(self, key: str, value: Any):
-        self.__set_value(key, value)
+        try:
+            self.__set_value(key, value)
+        except:
+            print(key, super().__dir__())
+            raise
 
     def __setattr__(self, key: str, value: Any):
         self.__set_child(key, value)
@@ -246,9 +256,6 @@ class ConfigDict(dict):
         for key, value in self.__iter_items(recursive=True):
             kvs.append(f"'{key}': {value}")
         return "ConfigDict({" + ", ".join(kvs) + "})"
-        # for key, value in self.__iter_items():
-        #     kvs.append(f"{key}={repr(value)}")
-        # return "ConfigDict(" + ", ".join(kvs) + ")"
 
     def __str__(self):
         lines = []
@@ -259,20 +266,35 @@ class ConfigDict(dict):
         else:
             return "ConfigDict({})"
 
+    def __getstate__(self):
+        state = {
+            "__locked": self.__super_getattr("locked"),
+            "__dict__": self.to_dict(),
+        }
+        return state
+
+    def __setstate__(self, state):
+        self.__super_setattr("children", {})
+        self.__super_setattr("locked", False)
+        self.update(state["__dict__"])
+
+        if state["__locked"] is True:
+            self.lock()
+
     def __iter__(self):
         for key, _ in self.__iter_items():
             yield key
 
     # TODO: Change implementation from list to dictview
 
-    def keys(self, recursive: bool = False) -> Iterable[str]:
-        return list(k for k, _ in self.__iter_items(recursive=recursive))
+    def keys(self, flatten: bool = False) -> Iterable[str]:
+        return list(k for k, _ in self.__iter_items(recursive=flatten))
 
-    def values(self, recursive: bool = False) -> Iterable[Any]:
-        return list(v for _, v in self.__iter_items(recursive=recursive))
+    def values(self, flatten: bool = False) -> Iterable[Any]:
+        return list(v for _, v in self.__iter_items(recursive=flatten))
 
-    def items(self, recursive: bool = False) -> Iterable[Tuple[str, Any]]:
-        return list((k, v) for k, v in self.__iter_items(recursive=recursive))
+    def items(self, flatten: bool = False) -> Iterable[Tuple[str, Any]]:
+        return list((k, v) for k, v in self.__iter_items(recursive=flatten))
 
     def get(self, key: str, default: Any = None) -> Any:
         if key in self:
@@ -282,7 +304,7 @@ class ConfigDict(dict):
 
     def pop(self, key: str, default: Any = None) -> Any:
         if self.is_locked():
-            raise RuntimeError(f"Cannot pop '{key}' in locked ConfigDict.")
+            raise RuntimeError(f"Cannot pop '{key}' from locked ConfigDict.")
 
         if key in self:
             value = self.__get_value(key)
@@ -292,10 +314,16 @@ class ConfigDict(dict):
             return default
 
     def clear(self):
+        if self.is_locked():
+            raise RuntimeError(f"Cannot clear locked ConfigDict.")
+
         super().clear()
         self.__super_getattr("children").clear()
 
     def popitem(self) -> tuple[str, Any]:
+        if self.is_locked():
+            raise RuntimeError(f"Cannot popitem from locked ConfigDict.")
+
         key, value = super().popitem()
         if isinstance(value, ConfigDict):
             self.__super_getattr("children").pop(key)
@@ -329,9 +357,9 @@ class ConfigDict(dict):
         return ConfigDict(**kvs).lock(mode=self.is_locked())
 
     # TODO: Improve this implementation
-    def to_dict(self):
+    def to_dict(self, flatten: bool = False):
         d = {}
-        for key, value in self.__iter_items():
+        for key, value in self.__iter_items(recursive=flatten):
             if isinstance(value, ConfigDict):
                 d[key] = value.to_dict()
             else:
@@ -350,8 +378,6 @@ class ConfigDict(dict):
 # - __lt__
 # - __ne__
 # - __or__
-# - __reduce__
-# - __reduce_ex__
 # - __ror__
 # - __getstate__
 # - __setstate__

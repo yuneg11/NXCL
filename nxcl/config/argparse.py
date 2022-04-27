@@ -53,7 +53,7 @@ def add_config_arguments(
     if aliases is None:
         aliases = {}
 
-    for key, value in config.items(recursive=True):
+    for key, value in config.items(flatten=True):
         if key.startswith("_"):
             continue
 

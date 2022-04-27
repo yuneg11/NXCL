@@ -259,6 +259,6 @@ class Progress(_Progress):
         remove: bool = False,
     ) -> Iterable[ProgressType]:
         yield from self.track(
-            range(*args),
-            description=description, task_id=task_id, update_period=update_period, remove=remove,
+            range(*args), description=description, task_id=task_id,
+            update_period=update_period, remove=remove,
         )

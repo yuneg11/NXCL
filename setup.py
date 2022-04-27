@@ -1,4 +1,5 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
 
 with open("nxcl/__init__.py") as init_file:
     __version__ = ""
@@ -21,11 +22,13 @@ setup(
     description="NXCL is an eXperiment Core Library",
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="https://github.com/yuneg11/NXCL",
+    url="https://github.com/yuneg11/nxcl",
     project_urls={
-        "Bug Tracker": "https://github.com/yuneg11/nxcl/issues"
+        "Documentation": "https://yuneg11.github.io/NXCL",
+        "Source": "https://github.com/yuneg11/nxcl",
+        "Tracker": "https://github.com/yuneg11/nxcl/issues"
     },
-    packages=["nxcl"],
+    packages=find_packages(include=["nxcl", "nxcl.*"]),
     package_dir={"nxcl": "nxcl"},
     # package_data={'': []},
     # include_package_data=True,

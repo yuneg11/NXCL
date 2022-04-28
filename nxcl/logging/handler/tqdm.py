@@ -20,7 +20,7 @@ class TqdmHandler(Handler):
             msg = self.format(record)
             tqdm.write(msg)
             self.flush()
+        except Exception:
+            self.handleError(record)
         except (KeyboardInterrupt, SystemExit):
             raise
-        except:
-            self.handleError(record)

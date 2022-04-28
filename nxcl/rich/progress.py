@@ -25,7 +25,7 @@ from rich.text import Text
 
 
 TaskID = NewType("TaskID", int)
-StyleType = Union[str, "Style"]
+StyleType = Union[str, Style]
 ProgressType = TypeVar("ProgressType")
 
 

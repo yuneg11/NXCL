@@ -135,19 +135,19 @@ class RichFileHandler(RichHandler):
             keywords=keywords,
         )
 
-        def close(self):
-            self.acquire()
+    def close(self):
+        self.acquire()
+        try:
             try:
-                try:
-                    if self.stream:
-                        try:
-                            self.flush()
-                        finally:
-                            stream = self.stream
-                            self.stream = None
-                            if hasattr(stream, "close"):
-                                stream.close()
-                finally:
-                    super().close(self)
+                if self.stream:
+                    try:
+                        self.flush()
+                    finally:
+                        stream = self.stream
+                        self.stream = None
+                        if hasattr(stream, "close"):
+                            stream.close()
             finally:
-                self.release()
+                super().close()
+        finally:
+            self.release()

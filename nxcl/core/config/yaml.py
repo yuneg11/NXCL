@@ -143,7 +143,7 @@ class NXCLRepresenterMixin(BaseRepresenter):
     def represent_module(self, data):
         # TODO: Implement this
         raise NotImplementedError
-        return self.represent_scalar("!module:" + data.module_id, data.to_dict())
+        # return self.represent_scalar("!module:" + data.module_id, data.to_dict())
 
 
 class NXCLSafeRepresenter(SafeRepresenter, NXCLRepresenterMixin):

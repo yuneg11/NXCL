@@ -19,7 +19,7 @@ def link_output_dir(output_dir: str, subnames: Iterable[str]):
     os.symlink(os.path.join(*([".."] * len(subnames)), "_", os.path.basename(output_dir)), link_dir)
 
 
-def setup_logger(logger_name: str, output_dir: str, suppress: Optional[Iterable] = None):
+def setup_logger(logger_name: str, output_dir: str, suppress: Iterable = ()):
     from nxcl.rich.logging import RichHandler, RichFileHandler
 
     LOG_SHORT_FORMAT = "[%(asctime)s] %(message)s"

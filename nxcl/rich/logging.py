@@ -76,6 +76,7 @@ class RichFileHandler(RichHandler):
         errors = None,
         level: Union[int, str] = logging.NOTSET,
         *,
+        width: int = 200,
         show_time: bool = False,
         omit_repeated_times: bool = False,
         show_level: bool = False,
@@ -104,7 +105,7 @@ class RichFileHandler(RichHandler):
         self.stream = open(self.baseFilename, self.mode, encoding=self.encoding, errors=self.errors)
         self.console = Console(
             file=self.stream,
-            width=10000,
+            width=width,
             markup=markup,
             log_time=show_time,
             log_path=show_path,

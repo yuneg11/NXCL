@@ -72,7 +72,7 @@ def add_config_arguments(
             flags = [key_flag]
 
         if isinstance(value, (list, tuple)):
-            t = type(value[0])
+            t = type(value[0]) if value else str
             nargs = "*"
         elif isinstance(value, bool):
             t = convert_to_bool

@@ -1,11 +1,15 @@
+from __future__ import annotations
 from typing import Any, Union, Optional, Iterable, List
 
 import os
 import logging
+from logging import LogRecord
 
 from rich.logging import RichHandler as _RichHandler
 from rich.highlighter import Highlighter
-from rich.console import Console
+from rich.console import Console, ConsoleRenderable
+from rich.traceback import Traceback
+from rich.containers import Renderables
 
 
 ModuleType = Any
@@ -65,6 +69,18 @@ class RichHandler(_RichHandler):
             log_time_format=log_time_format,
             keywords=keywords,
         )
+
+    def render(
+        self,
+        *,
+        record: LogRecord,
+        traceback: Optional[Traceback],
+        message_renderable: ConsoleRenderable,
+    ) -> ConsoleRenderable:
+
+        log_renderable = Renderables([message_renderable] if not traceback else [message_renderable, traceback])
+        return log_renderable
+
 
 
 class RichFileHandler(RichHandler):

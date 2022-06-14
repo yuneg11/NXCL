@@ -17,7 +17,7 @@ __all__ = [
 # - Support stream as file input.
 
 
-def load_config(file: PathLike, Loader=NXCLLoader):
+def load_config(file: PathLike, Loader=NXCLLoader) -> ConfigDict:
     """
     Load config from file.
     """
@@ -25,10 +25,15 @@ def load_config(file: PathLike, Loader=NXCLLoader):
     path = Path(file).expanduser()
 
     if not path.exists():
-        raise FileNotFoundError(f"file not found: {path}")
+        raise FileNotFoundError(f"File not found: {path}")
 
     with path.open("r") as f:
-        return yaml.load(f, Loader=Loader)
+        config = yaml.load(f, Loader=Loader)
+
+    if not isinstance(config, ConfigDict):
+        raise TypeError(f"Invalid config: the root of config should be mapping, got {type(config)}")
+
+    return config
 
 
 def save_config(config: ConfigDict, file: PathLike, Dumper=NXCLDumper, **yaml_kwargs):

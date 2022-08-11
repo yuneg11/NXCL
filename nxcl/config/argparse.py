@@ -76,6 +76,10 @@ def add_config_arguments(
             nargs = "*"
         elif isinstance(value, bool):
             t = convert_to_bool
+            nargs = None
+        elif value is None:
+            t = str
+            nargs = None
         else:
             t = type(value)
             nargs = None

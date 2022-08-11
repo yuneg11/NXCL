@@ -6,9 +6,9 @@ if TYPE_CHECKING:
     from .rich import RichHandler, RichFileHandler
     from .tqdm import TqdmHandler
 else:
-    RichHandler     = LazyObject("RichHandler",     "nxcl.logging.handler.rich")
-    RichFileHandler = LazyObject("RichFileHandler", "nxcl.logging.handler.rich")
-    TqdmHandler     = LazyObject("TqdmHandler",     "nxcl.logging.handler.tqdm")
+    RichHandler     = LazyObject("RichHandler",     ".rich", "rich", globals(), __package__)
+    RichFileHandler = LazyObject("RichFileHandler", ".rich", "rich", globals(), __package__)
+    TqdmHandler     = LazyObject("TqdmHandler",     ".tqdm", "tqdm", globals(), __package__)
 
 
 __all__ = [

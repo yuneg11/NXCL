@@ -9,14 +9,16 @@ if TYPE_CHECKING:
     from . import logging
     from . import rich
     from . import utils
-    from . import experimental
+    from . import dev
+    from . import experimental   # deprecated
 else:
-    # cli = LazyModule("nxcl.cli")
-    config = LazyModule("nxcl.config")
-    logging = LazyModule("nxcl.logging")
-    rich = LazyModule("nxcl.rich")
-    utils = LazyModule("nxcl.utils")
-    experimental = LazyModule("nxcl.experimental")
+    # cli = LazyModule(".cli", "cli", globals(), __package__)
+    config = LazyModule(".config", "config", globals(), __package__)
+    logging = LazyModule(".logging", "logging", globals(), __package__)
+    rich = LazyModule(".rich", "rich", globals(), __package__)
+    utils = LazyModule(".utils", "utils", globals(), __package__)
+    dev = LazyModule(".dev", "dev", globals(), __package__)
+    experimental = LazyModule(".experimental", "experimental", globals(), __package__)  # deprecated
 
 
 __all__ = [
@@ -26,7 +28,8 @@ __all__ = [
     "logging",
     "rich",
     "utils",
-    "experimental",
+    "dev",
+    "experimental",  # deprecated
 ]
 
-__version__ = "0.0.3.dev3"
+__version__ = "0.0.4"

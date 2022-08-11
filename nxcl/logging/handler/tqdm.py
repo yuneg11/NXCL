@@ -6,7 +6,7 @@ from nxcl.core.misc.module import LazyModule
 if TYPE_CHECKING:
     from tqdm.auto import tqdm
 else:
-    tqdm = LazyModule("tqdm.auto.tqdm")
+    tqdm = LazyModule("tqdm.auto.tqdm", "tqdm", globals())
 
 
 __all__ = [

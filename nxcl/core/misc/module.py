@@ -15,7 +15,7 @@
 
 
 from types import ModuleType
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, Optional, Dict
 from importlib import import_module
 
 
@@ -34,7 +34,7 @@ class LazyModule(ModuleType):
         self,
         module_name: str,
         local_module_name: str,
-        parent_globals: dict[str, Any],
+        parent_globals: Dict[str, Any],
         base_package: Optional[str] = None,
         doc: Optional[str] = None,
     ):
@@ -68,7 +68,7 @@ class LazyObject(object):
         object_name: str,
         module_name: str,
         local_module_name: str,
-        parent_globals: dict[str, Any],
+        parent_globals: Dict[str, Any],
         base_package: Optional[str] = None,
         doc: Optional[str] = None,
     ):
